@@ -12,34 +12,35 @@
             <table>
                 <!-- 달력 머리 부분 -->
                 <thead>
-                    <tr>
-                        <td
+                <tr>
+                    <td
                             class="base-calendar-content-header-wrapper"
                             v-for="(item, index) in calendarHeaderTextList"
                             :key="`${index}-calendar-header-text`"
                             :class="{ sunday: isSunday(index), saturday: isSaturday(index) }">
-                            {{ item }}
-                        </td>
-                    </tr>
+                        {{ item }}
+                    </td>
+                </tr>
                 </thead>
                 <!-- 달력 몸통 부분 -->
                 <tbody class="bases-calendar-content-body-wrapper">
-                    <tr
+                <tr
                         v-for="(dates, weekIndex) in weekList"
                         :key="`${ weekIndex }-calendar-week`">
-                        <td
+                    <td
                             v-for="(date, dateIndex) in dates"
                             :key="`${ dateIndex }-calendar-date`"
-                            :class="{ sunday: isSunday(dateIndex), saturday: isSaturday(dateIndex) }"
-                        >
+                            :class="{ sunday: isSunday(dateIndex), saturday: isSaturday(dateIndex) }">
+                        <transition name="fade" appear>
                             <button
-                                :class="{ marked: isMarked(date), today: isToday(date) }"
-                                @dblclick="OnDoubleClickDate(date)"
-                                @click="OnClickDate(date)">
+                                    :class="{ marked: isMarked(date), today: isToday(date) }"
+                                    @dblclick="OnDoubleClickDate(date)"
+                                    @click="OnClickDate(date)">
                                 {{ date > 0 ? date : '' }}
                             </button>
-                        </td>
-                    </tr>
+                        </transition>
+                    </td>
+                </tr>
                 </tbody>
 
             </table>
@@ -236,6 +237,13 @@
         border-radius: 50%;
         width: 85px;
         height: 85px;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: .5s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+        transform: scale(0.1);
     }
 
 </style>
