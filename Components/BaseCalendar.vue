@@ -31,11 +31,11 @@
                             v-for="(date, dateIndex) in dates"
                             :key="`${ dateIndex }-calendar-date`"
                             :class="{ sunday: isSunday(dateIndex), saturday: isSaturday(dateIndex) }">
-                        <transition name="fade" appear>
+                        <transition name="fade" appear mode="in-out">
                             <button
                                     :class="{ marked: isMarked(date), today: isToday(date) }"
-                                    @dblclick="OnDoubleClickDate(date)"
-                                    @click="OnClickDate(date)">
+                                    @dblclick="onDoubleClickDate(date)"
+                                    @click="onClickDate(date)">
                                 {{ date > 0 ? date : '' }}
                             </button>
                         </transition>
@@ -54,15 +54,15 @@
     export default {
         name: 'BaseCalendar',
         props: {
-            ClickDateCallback: {
+            OnClickDate: {
                 type: Function,
                 default: null
             },
-            DoubleClickDateCallback: {
+            OnDoubleClickDate: {
                 type: Function,
                 default: null
             },
-            markedDateList: {
+            MarkedDateList: {
                 type: Array,
                 default: () => []
             }
@@ -71,7 +71,8 @@
             return {
                 currentYear: 2019,
                 currentMonth: 9,
-                calendarHeaderTextList: ['S', 'M', 'T', 'W', 'T', 'F', 'S']
+                calendarHeaderTextList: ['S', 'M', 'T', 'W', 'T', 'F', 'S'],
+                targetDate: new Date()
             }
         },
         watch: {
@@ -91,7 +92,7 @@
         },
         computed: {
             selectedDate () {
-                return this.$attrs.value || new Date()
+                return this.$attrs.value || this.targetDate
             },
             targetStartDate () {
                 return new Date(this.currentYear, this.currentMonth, 1)
@@ -106,7 +107,7 @@
                 return this.targetLastDate.getDate() - this.targetStartDate.getDate() + 1
             },
             markedDateStringList () {
-                return this.markedDateList.map(item => {
+                return this.MarkedDateList.map(item => {
                     if (item instanceof Date) {
                         return item.toDateString()
                     }
@@ -152,19 +153,24 @@
             modifyMonth (amount) {
                 this.currentMonth += amount
             },
-            OnClickDate (date) {
+            onClickDate (date) {
                 const resultDate = new Date(this.currentYear, this.currentMonth, date)
-                this.$emit('input', resultDate)
 
-                if (this.ClickDateCallback !== null) {
-                    this.ClickDateCallback(resultDate)
+                if (this.$attrs.value !== undefined) {
+                    this.$emit('input', resultDate)
+                } else {
+                    this.targetDate = resultDate
+                }
+
+                if (this.OnClickDate !== null) {
+                    this.OnClickDate(resultDate)
                 }
             },
-            OnDoubleClickDate (date) {
+            onDoubleClickDate (date) {
                 const resultDate = new Date(this.currentYear, this.currentMonth, date)
 
-                if (this.DoubleClickDateCallback !== null) {
-                    this.DoubleClickDateCallback(resultDate)
+                if (this.OnDoubleClickDate !== null) {
+                    this.OnDoubleClickDate(resultDate)
                 }
             }
         },
@@ -178,8 +184,8 @@
 <style scoped>
     .base-calendar-wrapper {
         width: 100%;
-        height: 800px;
         padding-top: 86px;
+        padding-bottom: 86px;
 
         text-align: center;
     }
@@ -219,10 +225,12 @@
 
     .sunday {
         color: red;
+        transition: 0.5s;
     }
 
     .saturday {
         color: #1c71ff;
+        transition: 0.5s;
     }
 
     .marked {
@@ -237,13 +245,16 @@
         border-radius: 50%;
         width: 85px;
         height: 85px;
+        transition: 0.5s;
     }
 
-    .fade-enter-active, .fade-leave-active {
-        transition: .5s;
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: all .5s;
     }
     .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-        transform: scale(0.1);
+        transform: scale(0.0);
+        opacity: 0;
     }
 
 </style>

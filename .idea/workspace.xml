@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="951ec620-6aba-4f7f-9cd5-b6587b9a8236" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Components/BaseCalendar.vue" beforeDir="false" afterPath="$PROJECT_DIR$/Components/BaseCalendar.vue" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -55,7 +55,7 @@
       <updated>1569562794288</updated>
       <workItem from="1569562795633" duration="471000" />
       <workItem from="1569563306998" duration="274000" />
-      <workItem from="1569564057058" duration="835000" />
+      <workItem from="1569564057058" duration="967000" />
     </task>
     <servers />
   </component>
